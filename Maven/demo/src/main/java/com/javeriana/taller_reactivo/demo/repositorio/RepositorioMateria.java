@@ -6,8 +6,9 @@ import reactor.core.publisher.Mono;
 
 // Asegúrate que la clase se llame igual que el archivo
 public interface RepositorioMateria extends ReactiveCrudRepository<Materia, Long> {
-    
+
     // Métodos requeridos por ServicioMateria
     Mono<Boolean> existsByNombre(String nombre);
+
     Mono<Materia> findByNombre(String nombre);
 }

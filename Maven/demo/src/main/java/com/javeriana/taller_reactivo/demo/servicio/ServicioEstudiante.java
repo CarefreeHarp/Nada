@@ -1,4 +1,4 @@
-package com.javeriana.taller_reactivo.demo.Servicio;
+package com.javeriana.taller_reactivo.demo.servicio;
 
 import com.javeriana.taller_reactivo.demo.modelo.Estudiante;
 import com.javeriana.taller_reactivo.demo.repositorio.RepositorioEstudiante;
@@ -34,23 +34,25 @@ public class ServicioEstudiante {
     }
 
     public Mono<Estudiante> actualizar(Long id, Estudiante cambios) {
-        return repo.findById(id)
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Estudiante no existe")))
-                .flatMap(actual -> {
-                    actual.setNombre(cambios.getNombre());
-                    actual.setCorreo(cambios.getCorreo());
-                    // Verificar unicidad de correo si cambió
-                    return repo.findByCorreo(cambios.getCorreo())
-                            .filter(e -> e.getId().equals(id)) // es el mismo -> ok
-                            .switchIfEmpty(
-                                    repo.existsByCorreo(cambios.getCorreo())
-                                       .flatMap(existe -> existe
-                                               ? Mono.error(new IllegalArgumentException("El correo ya está registrado"))
-                                               : Mono.just(actual))
-                            )
-                            .then(repo.save(actual));
-                });
-    }
+    return repo.findById(id)
+        .switchIfEmpty(Mono.error(new IllegalArgumentException("Estudiante no existe")))
+        .flatMap(actual -> 
+            repo.findByCorreo(cambios.getCorreo())
+                .flatMap(existente -> {
+                    if (!existente.getId().equals(id)) {
+                        return Mono.error(new IllegalArgumentException("El correo ya está registrado"));
+                    }
+                    return Mono.just(actual);
+                })
+                .defaultIfEmpty(actual) // si no hay nadie con ese correo -> OK
+                .flatMap(act -> {
+                    act.setNombre(cambios.getNombre());
+                    act.setCorreo(cambios.getCorreo());
+                    return repo.save(act);
+                })
+        );
+}
+
 
     public Mono<Void> eliminar(Long id) {
         return repo.deleteById(id);
