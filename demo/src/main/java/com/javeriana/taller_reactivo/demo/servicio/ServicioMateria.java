@@ -1,4 +1,4 @@
-package com.javeriana.taller_reactivo.demo.Servicio;
+package com.javeriana.taller_reactivo.demo.servicio;
 
 import com.javeriana.taller_reactivo.demo.modelo.Materia;
 import com.javeriana.taller_reactivo.demo.repositorio.RepositorioMateria;

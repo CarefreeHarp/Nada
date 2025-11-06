@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<!-- La línea de <lombok.version> ha sido ELIMINADA. Ya no está aquí. -->
+		<!-- El parent POM (3.5.7) ya define la propiedad 'lombok.version' correcta. -->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,6 +39,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
 		<dependency>
@@ -53,6 +59,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<!-- Correcto: no tiene versión, la hereda del parent -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,10 +70,6 @@
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -80,6 +83,10 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<!-- ESTA LÍNEA ESTÁ BIEN. AHORA LEERÁ LA VERSIÓN -->
+							<!-- 'lombok.version' DEFINIDA EN EL PARENT POM, -->
+							<!-- no la versión incorrecta que yo puse. -->
+							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
