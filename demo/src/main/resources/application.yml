@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: taller3-reactivo
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/taller3
+    username: daniel
+    password: 1234
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+server:
+  port: 8080

@@ -38,21 +38,25 @@ public class EstudianteController {
                 .map(e -> ResponseEntity.status(201).body(e));
     }
 
-    @PutMapping("/{id}")
-    public Mono<ResponseEntity<Estudiante>> actualizar(@PathVariable Long id, @Valid @RequestBody Mono<Estudiante> estudianteMono) {
-        return estudianteMono
-                .flatMap(cambios -> servicio.actualizar(id, cambios))
-                .map(ResponseEntity::ok)
-                .onErrorResume(IllegalArgumentException.class, ex ->
-                    Mono.just(ResponseEntity.badRequest().build())
-                )
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
+@PutMapping("/{id}")
+public Mono<ResponseEntity<Estudiante>> actualizar(
+        @PathVariable Long id,
+        @Valid @RequestBody Estudiante cambios) {
+    return servicio.actualizar(id, cambios)
+            .map(ResponseEntity::ok)
+            .onErrorResume(IllegalArgumentException.class,
+                ex -> Mono.just(ResponseEntity.badRequest().build()))
+            .defaultIfEmpty(ResponseEntity.notFound().build());
+}
 
-    @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> eliminar(@PathVariable Long id) {
-        return servicio.porId(id)
-                .flatMap(e -> servicio.eliminar(id).thenReturn(ResponseEntity.noContent().<Void>build()))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
+
+   @DeleteMapping("/{id}")
+public Mono<ResponseEntity<Void>> eliminar(@PathVariable Long id) {
+    return servicio.eliminar(id)
+            .then(Mono.just(ResponseEntity.noContent().<Void>build()))
+            .onErrorResume(IllegalArgumentException.class, ex ->
+                Mono.just(ResponseEntity.notFound().build())
+            );
+}
+
 }
