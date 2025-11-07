@@ -17,7 +17,7 @@ public class Estudiante {
 
     @NotBlank
     private String nombre;
-    
+   @NotBlank
     private String apellido;
 
     @Email

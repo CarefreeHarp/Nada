@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS estudiantes (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
     correo VARCHAR(100) UNIQUE NOT NULL
 );
 
@@ -17,6 +18,6 @@ CREATE TABLE IF NOT EXISTS notas (
     observacion TEXT,
     estudiante_id BIGINT NOT NULL,
     materia_id BIGINT NOT NULL,
-    FOREIGN KEY (estudiante_id) REFERENCES estudiante(id) ON DELETE CASCADE,
-    FOREIGN KEY (materia_id) REFERENCES materia(id) ON DELETE CASCADE
+    FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id) ON DELETE CASCADE,
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
 );
